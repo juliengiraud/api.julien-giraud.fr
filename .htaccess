@@ -1,0 +1,15 @@
+RewriteEngine on
+
+# Redirection vers https://www.*
+RewriteCond %{HTTPS} off [OR]
+RewriteCond %{HTTP_HOST} !^www\. [NC]
+RewriteCond %{HTTP_HOST} ^(?:www\.)?(.+)$ [NC]
+RewriteRule ^.*$ https://www.%1%{REQUEST_URI} [L,NE,R=301]
+
+# Redirection vers index.html?path=*
+Options +FollowSymLinks
+RewriteCond %{REQUEST_URI} !=/controller/global_controller.php
+RewriteRule (.*) /controller/global_controller.php?path=$1 [NC,L,QSA]
+
+# Bloquer le ls des dossiers
+Options -Indexes
