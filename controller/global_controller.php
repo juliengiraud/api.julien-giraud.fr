@@ -1,6 +1,7 @@
 <?php
 
 require_once('../config/config.php');
+require_once(PATH_SERVICE . '/HeaderService.php');
 
 if (DEBUG === true) {
     ini_set('display_errors', 1);
@@ -8,31 +9,23 @@ if (DEBUG === true) {
     error_reporting(E_ALL);
 }
 
-header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json; charset=UTF-8");
-
+$headerService = new HeaderService();
 $path = explode('/', $_GET['path']);
 
-switch ($path[0]) {
+if ($headerService->getContinue()) {
+    switch ($path[0]) {
 
-    case 'comptes':
-        require_once('./comptes_controller.php');
-        break;
+        case 'comptes':
+            require_once('./comptes_controller.php');
+            break;
 
-    case 'test':
-        require_once('./test_controller.php');
-        break;
+        case 'test':
+            require_once('./test_controller.php');
+            break;
 
-    default:
-        http_response_code(404);
+        default:
+            http_response_code(404);
+    }
 }
 
-if (http_response_code() === 404) {
-    echo json_encode(
-        array(
-            'success' => false,
-            'message' => 'The requested URL was not found on this server',
-            'error' => 'NOT_FOUND'
-        )
-    );
-}
+$headerService->returnHttpErrorResponseIfNeeded();

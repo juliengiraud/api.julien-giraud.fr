@@ -1,8 +1,10 @@
 <?php
 
 require_once(PATH_SERVICE . '/VisitService.php');
+require_once(PATH_SERVICE . '/TokenService.php');
 
 $visitService = new VisitService();
+$tokenService = new TokenService();
 
 switch ($path[1]) {
 
@@ -11,11 +13,18 @@ switch ($path[1]) {
         break;
 
     case 'fridrich-download':
-        print($visitService->getPageViewCount('guide-methode-fridrich'));
+        echo $visitService->getPageViewCount('guide-methode-fridrich');
         break;
 
     case 'fridrich-view':
-        print($visitService->getPageViewCount('formation-rubiks-cube'));
+        echo $visitService->getPageViewCount('formation-rubiks-cube');
+        break;
+
+    case 'bearer':
+        $token = $tokenService->generateRandomString(64);
+        echo json_encode(array(
+            'newToken' => $token
+        ));
         break;
 
     default:
