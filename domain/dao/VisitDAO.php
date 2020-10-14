@@ -10,7 +10,7 @@ class VisitDAO extends AbstractGenericDAO {
 
     public function findAll() {
         $query = 'SELECT * FROM visit ORDER BY id DESC';
-        return $this->getInstance()->db->query($query)->fetchAll(PDO::FETCH_CLASS, 'Visit');
+        return $this->getInstance()->db->query($query)->fetchAll(PDO::FETCH_OBJ);
     }
 
     public function create($entity) {

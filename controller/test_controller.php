@@ -8,19 +8,22 @@ $tokenService = new TokenService();
 
 switch ($path[1]) {
 
-    case 'db':
-        var_dump($visitService->getAllVisits());
+    case 'getAllVisits':
+        $visits = $visitService->getAllVisits();
+        echo json_encode($visits);
         break;
 
-    case 'fridrich-download':
-        echo $visitService->getPageViewCount('guide-methode-fridrich');
+    case 'getFridrichDownloadCount':
+        $count = $visitService->getPageViewCount('guide-methode-fridrich');
+        echo json_encode($count);
         break;
 
-    case 'fridrich-view':
-        echo $visitService->getPageViewCount('formation-rubiks-cube');
+    case 'getFridrichViewCount':
+        $count = $visitService->getPageViewCount('formation-rubiks-cube');
+        echo json_encode($count);
         break;
 
-    case 'bearer':
+    case 'getNewBearerToken':
         $token = $tokenService->generateRandomString(64);
         echo json_encode(array(
             'newToken' => $token
