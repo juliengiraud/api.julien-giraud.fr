@@ -24,7 +24,7 @@ switch ($path[1]) {
         break;
 
     case 'getNewBearerToken':
-        $token = $tokenService->generateRandomString(64);
+        $token = $tokenService->generateNewToken();
         echo json_encode(array(
             'newToken' => $token
         ));

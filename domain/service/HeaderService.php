@@ -31,7 +31,7 @@ class HeaderService {
         }
 
         // Check token
-        if ($this->tokenService->isTokenValid()) {
+        if ($this->tokenService->isTokenAuthorizationValid()) {
             $this->continue = true;
         } else {
             http_response_code(401);

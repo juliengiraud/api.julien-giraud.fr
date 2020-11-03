@@ -19,6 +19,10 @@ if ($headerService->getContinue()) {
             require_once('./comptes_controller.php');
             break;
 
+        case 'stats':
+            require_once('./stats_controller.php');
+            break;
+
         case 'test':
             require_once('./test_controller.php');
             break;

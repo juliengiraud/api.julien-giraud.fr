@@ -6,6 +6,9 @@ RewriteCond %{HTTP_HOST} !^www\. [NC]
 RewriteCond %{HTTP_HOST} ^(?:www\.)?(.+)$ [NC]
 RewriteRule ^.*$ https://www.%1%{REQUEST_URI} [L,NE,R=301]
 
+# Disable indexing on folders and files
+Options -Indexes
+
 # Redirect to index.html?path=*
 Options +FollowSymLinks
 RewriteCond %{REQUEST_URI} !=/controller/global_controller.php
@@ -14,6 +17,3 @@ RewriteRule (.*) /controller/global_controller.php?path=$1 [NC,L,QSA]
 # Keep authorization token in header
 RewriteCond %{HTTP:Authorization} ^(.*)
 RewriteRule .* - [e=HTTP_AUTHORIZATION:%1]
-
-# Disable indexing on folders and files
-Options -Indexes

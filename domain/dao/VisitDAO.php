@@ -35,4 +35,13 @@ class VisitDAO extends AbstractGenericDAO {
         return $this->getInstance()->db->query($query)->fetch(PDO::FETCH_OBJ)->value;
     }
 
+    public function getAllPagesViewCount() {
+        $query = "SELECT target AS page, COUNT(target) AS count
+                  FROM visit
+                  WHERE target LIKE 'https://www.julien-giraud.fr%'
+                  GROUP BY target
+                  ORDER BY COUNT(target) DESC";
+        return $this->getInstance()->db->query($query)->fetchAll(PDO::FETCH_OBJ);
+    }
+
 }
