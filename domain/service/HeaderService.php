@@ -6,16 +6,22 @@ class HeaderService {
 
     private $continue;
     private $tokenService;
+    public static $errorMessage; // TODO implémenter un singleton
 
     public function __construct() {
 
         // Initialize variables
         $this->continue = false;
+        HeaderService::$errorMessage = null;
         $this->tokenService = new TokenService();
 
         // Start service functions
         $this->initService();
     }
+
+    // public function setErrorMessage($message) {
+    //     $this->errorMessage = $message;
+    // }
 
     private function initService() {
 
@@ -41,6 +47,7 @@ class HeaderService {
             $this->continue = true;
         } else {
             http_response_code(401);
+            HeaderService::$errorMessage = 'Invalid token.';
         }
     }
 
@@ -55,7 +62,7 @@ class HeaderService {
             case 401:
                 $response = array(
                     'success' => false,
-                    'message' => 'Invalid token.',
+                    'message' => HeaderService::$errorMessage,
                     'error' => 'UNAUTHORIZED'
                 );
                 break;
