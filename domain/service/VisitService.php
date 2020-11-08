@@ -23,11 +23,9 @@ class VisitService {
         }
 
         $visit = new Visit();
-        $visit->setSource($_SERVER['HTTP_ORIGIN']);
         $visit->setTarget($_SERVER['SCRIPT_URI']);
         $visit->setIp($_SERVER['HTTP_REMOTE_IP']);
         $visit->setUserAgent($_SERVER['HTTP_USER_AGENT']);
-        $visit->setParams($_SERVER['QUERY_STRING']);
         $this->visitDAO->saveOrUpdate($visit);
     }
 

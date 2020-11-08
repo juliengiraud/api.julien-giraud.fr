@@ -14,15 +14,13 @@ class VisitDAO extends AbstractGenericDAO {
     }
 
     public function create($entity) {
-        $sql = 'INSERT INTO visit (id, source, target, ip, userAgent, params) VALUES (?, ?, ?, ?, ?, ?)';
+        $sql = 'INSERT INTO visit (id, target, ip, userAgent) VALUES (?, ?, ?, ?)';
         $query = $this->getInstance()->db->prepare($sql);
         $query->execute(array( // Pas d'injection possible avec la source de l'objet Visit normalement
             $entity->getId(),
-            $entity->getSource(),
             $entity->getTarget(),
             $entity->getIp(),
-            $entity->getUserAgent(),
-            $entity->getParams())
+            $entity->getUserAgent())
         );
         return $this->getInstance()->db->lastInsertId();
     }
