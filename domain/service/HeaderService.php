@@ -30,8 +30,14 @@ class HeaderService {
             exit(0);
         }
 
-        // Check token
-        if ($this->tokenService->isTokenAuthorizationValid()) {
+        // Check authorization
+        $path = explode('/', $_GET['path']);
+        if ($this->tokenService->isTokenAuthorizationValid()
+                // We can access to some URL without token
+                || $path[0] === 'test' // -> /test
+                || $path[0] === 'comptes' && ($path[1] === 'login' // -> /comptes/login
+                    || $path[1] === 'register') // -> /comptes/register
+        ) {
             $this->continue = true;
         } else {
             http_response_code(401);

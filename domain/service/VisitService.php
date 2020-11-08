@@ -16,8 +16,7 @@ class VisitService {
         if ($_SERVER['REDIRECT_STATUS'] === '404' // 404 errors
                 || preg_match('/bot|crawl|spider|search/i', $_SERVER['HTTP_USER_AGENT']) // Bots
                 || preg_match('/preprod/', $_SERVER['SCRIPT_URI']) // My test server
-                || $_SERVER['HTTP_REMOTE_IP'] === '81.185.161.135' // My first ip
-                || $_SERVER['HTTP_REMOTE_IP'] === '81.185.170.173' // My second ip
+                || preg_match('/^81.185.{4,8}/', $_SERVER['HTTP_REMOTE_IP']) // Probably my IP
         ) {
             return;
         }
