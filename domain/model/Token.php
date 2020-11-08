@@ -1,6 +1,6 @@
 <?php
 
-class Token {
+class Token implements JsonSerializable {
 
     private $id;
     private $token;
@@ -18,6 +18,13 @@ class Token {
 
     public function setToken($token) {
         $this->token = $token;
+    }
+
+    public function jsonSerialize() {
+        return [
+            'id' => $this->id,
+            'login' => $this->token
+        ];
     }
 
 }

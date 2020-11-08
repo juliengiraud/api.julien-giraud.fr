@@ -8,11 +8,6 @@ class VisitDAO extends AbstractGenericDAO {
     public function __construct() {
     }
 
-    public function findAll() {
-        $query = 'SELECT * FROM visit ORDER BY id DESC';
-        return $this->getInstance()->db->query($query)->fetchAll(PDO::FETCH_OBJ);
-    }
-
     public function create($entity) {
         $sql = 'INSERT INTO visit (id, target, ip, userAgent) VALUES (?, ?, ?, ?)';
         $query = $this->getInstance()->db->prepare($sql);
@@ -30,7 +25,7 @@ class VisitDAO extends AbstractGenericDAO {
      */
     public function getPageViewCount($page) {
         $query = "SELECT COUNT(*) value FROM visit WHERE target LIKE '%" . $page . "%'";
-        return $this->getInstance()->db->query($query)->fetch(PDO::FETCH_OBJ)->value;
+        return $this->getInstance()->db->query($query)->fetchObject("Visit")->value;
     }
 
     public function getAllPagesViewCount() {

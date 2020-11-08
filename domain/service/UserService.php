@@ -17,8 +17,20 @@ class UserService {
     }
 
     public function register($userDTO) {
-        http_response_code(401);
-        HeaderService::$errorMessage = 'ERROR_REGISTER';
+        $user = new User();
+        $user->setLogin($userDTO->login);
+        $user->setHashedPassword(
+            password_hash($userDTO->password, PASSWORD_BCRYPT)
+        );
+
+        if ($this->userDAO->isLoginUsed($user->getLogin())) {
+            http_response_code(401);
+            HeaderService::$errorMessage = 'USED_LOGIN';
+            return null;
+        }
+
+        $user->setId($this->userDAO->create($user));
+        return $user;
     }
 
 }

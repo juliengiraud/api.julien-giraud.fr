@@ -9,8 +9,12 @@ class TokenDAO extends AbstractGenericDAO {
     }
 
     public function isTokenValid($token) {
-        $query = "SELECT COUNT(*) value FROM comptes_token WHERE token = '" . $token . "'";
-        return $this->getInstance()->db->query($query)->fetch(PDO::FETCH_OBJ)->value === '1';
+        $sql = 'SELECT COUNT(*) value FROM comptes_token WHERE token = ?';
+        $query = $this->getInstance()->db->prepare($sql);
+        $query->execute(array(
+            $token
+        ));
+        return $query->fetch(PDO::FETCH_OBJ)->value !== '0';
     }
 
 }
