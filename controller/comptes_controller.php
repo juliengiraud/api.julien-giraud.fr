@@ -9,7 +9,7 @@ switch ($path[1]) {
     case 'login':
         $userDTO = json_decode(
             file_get_contents('php://input')
-        );
+        )->data;
         $result = $userService->login($userDTO);
         if ($result !== null) {
             print json_encode($result);
@@ -19,7 +19,7 @@ switch ($path[1]) {
     case 'register':
         $userDTO = json_decode(
             file_get_contents('php://input')
-        );
+        )->data;
         $result = $userService->register($userDTO);
         if ($result !== null) {
             print json_encode($result);

@@ -30,4 +30,11 @@ class UserDAO extends AbstractGenericDAO {
         return $this->getInstance()->db->lastInsertId();
     }
 
+    public function getUserByLogin($login) {
+        $sql = 'SELECT * FROM comptes_user WHERE login = ?';
+        $query = $this->getInstance()->db->prepare($sql);
+        $query->execute([ $login ]);
+        return $query->fetch(PDO::FETCH_OBJ);
+    }
+
 }

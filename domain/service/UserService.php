@@ -12,8 +12,16 @@ class UserService {
     }
 
     public function login($userDTO) {
-        http_response_code(401);
-        HeaderService::$errorMessage = 'ERROR_LOGIN';
+        $user = $this->userDAO->getUserByLogin($userDTO->login);
+
+        if ($user === false || !password_verify($userDTO->password, $user->hashedPassword)) {
+            http_response_code(401);
+            HeaderService::$errorMessage = 'BAD_LOGIN_OR_PASSWORD';
+            return null;
+        }
+
+        // TODO ajouter le token dans le user avant de le renvoyer
+        return $user;
     }
 
     public function register($userDTO) {
@@ -30,6 +38,7 @@ class UserService {
         }
 
         $user->setId($this->userDAO->create($user));
+        // TODO ajouter le token dans le user avant de le renvoyer
         return $user;
     }
 
