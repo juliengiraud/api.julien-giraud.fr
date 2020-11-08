@@ -11,12 +11,12 @@ class VisitDAO extends AbstractGenericDAO {
     public function create($entity) {
         $sql = 'INSERT INTO visit (id, target, ip, userAgent) VALUES (?, ?, ?, ?)';
         $query = $this->getInstance()->db->prepare($sql);
-        $query->execute(array( // Pas d'injection possible avec la source de l'objet Visit normalement
+        $query->execute([
             $entity->getId(),
             $entity->getTarget(),
             $entity->getIp(),
-            $entity->getUserAgent())
-        );
+            $entity->getUserAgent()
+        ]);
         return $this->getInstance()->db->lastInsertId();
     }
 
@@ -24,8 +24,17 @@ class VisitDAO extends AbstractGenericDAO {
      * Return the number of visit for a specific page
      */
     public function getPageViewCount($page) {
-        $query = "SELECT COUNT(*) value FROM visit WHERE target LIKE '%" . $page . "%'";
-        return $this->getInstance()->db->query($query)->fetchObject("Visit")->value;
+        $sql = 'SELECT COUNT(*) value FROM visit WHERE target LIKE ?';
+        $query = $this->getInstance()->db->prepare($sql);
+        $query->execute([ '%'.$page.'%' ]);
+        return $query->fetch(PDO::FETCH_OBJ)->value;
+    }
+
+    public function isLoginUsed($login) {
+        $sql = 'SELECT COUNT(*) value FROM comptes_user WHERE login = ?';
+        $query = $this->getInstance()->db->prepare($sql);
+        $query->execute([ $login ]);
+        return $query->fetch(PDO::FETCH_OBJ)->value !== '0';
     }
 
     public function getAllPagesViewCount() {

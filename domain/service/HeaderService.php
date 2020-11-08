@@ -60,19 +60,19 @@ class HeaderService {
 
         switch(http_response_code()) {
             case 401:
-                $response = array(
+                $response = [
                     'success' => false,
                     'message' => HeaderService::$errorMessage,
                     'error' => 'UNAUTHORIZED'
-                );
+                ];
                 break;
 
             case 404:
-                $response = array(
+                $response = [
                     'success' => false,
                     'message' => 'The requested URL was not found on this server.',
                     'error' => 'NOT_FOUND'
-                );
+                ];
                 break;
         }
 

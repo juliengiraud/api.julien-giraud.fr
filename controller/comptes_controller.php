@@ -7,7 +7,9 @@ $userService = new UserService();
 switch ($path[1]) {
 
     case 'login':
-        $userDTO = json_decode(file_get_contents('php://input'));
+        $userDTO = json_decode(
+            file_get_contents('php://input')
+        );
         $result = $userService->login($userDTO);
         if ($result !== null) {
             print json_encode($result);
@@ -15,7 +17,9 @@ switch ($path[1]) {
         break;
 
     case 'register':
-        $userDTO = json_decode(file_get_contents('php://input'));
+        $userDTO = json_decode(
+            file_get_contents('php://input')
+        );
         $result = $userService->register($userDTO);
         if ($result !== null) {
             print json_encode($result);

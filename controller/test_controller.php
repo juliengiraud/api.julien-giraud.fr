@@ -8,11 +8,6 @@ $tokenService = new TokenService();
 
 switch ($path[1]) {
 
-    case 'getAllVisits':
-        $visits = $visitService->getAllVisits();
-        echo json_encode($visits);
-        break;
-
     case 'getFridrichDownloadCount':
         $count = $visitService->getPageViewCount('guide-methode-fridrich');
         echo json_encode($count);
@@ -25,9 +20,9 @@ switch ($path[1]) {
 
     case 'getNewBearerToken':
         $token = $tokenService->generateNewToken();
-        echo json_encode(array(
+        echo json_encode([
             'newToken' => $token
-        ));
+        ]);
         break;
 
     default:

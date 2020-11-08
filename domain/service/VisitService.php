@@ -28,10 +28,6 @@ class VisitService {
         $this->visitDAO->saveOrUpdate($visit);
     }
 
-    public function getAllVisits() {
-        return $this->visitDAO->findAll();
-    }
-
     public function getPageViewCount($page) {
         return $this->visitDAO->getPageViewCount($page);
     }
