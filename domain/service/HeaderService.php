@@ -7,6 +7,7 @@ class HeaderService {
     private $continue;
     private $tokenService;
     public static $errorMessage; // TODO implémenter un singleton
+    public static $errorName; // TODO implémenter un singleton
 
     public function __construct() {
 
@@ -18,10 +19,6 @@ class HeaderService {
         // Start service functions
         $this->initService();
     }
-
-    // public function setErrorMessage($message) {
-    //     $this->errorMessage = $message;
-    // }
 
     private function initService() {
 
@@ -63,7 +60,15 @@ class HeaderService {
                 $response = [
                     'success' => false,
                     'message' => HeaderService::$errorMessage,
-                    'error' => 'UNAUTHORIZED'
+                    'error' => HeaderService::$errorName === null ? 'UNAUTHORIZED' : HeaderService::$errorName
+                ];
+                break;
+
+            case 403:
+                $response = [
+                    'success' => false,
+                    'message' => HeaderService::$errorMessage,
+                    'error' => HeaderService::$errorName === null ? 'ALREADY_EXISTS' : HeaderService::$errorName
                 ];
                 break;
 
@@ -72,6 +77,14 @@ class HeaderService {
                     'success' => false,
                     'message' => 'The requested URL was not found on this server.',
                     'error' => 'NOT_FOUND'
+                ];
+                break;
+
+            case 422:
+                $response = [
+                    'success' => false,
+                    'message' => 'The request is missing a required parameter.',
+                    'error' => 'UNPROCESSABLE_ENTITY'
                 ];
                 break;
         }

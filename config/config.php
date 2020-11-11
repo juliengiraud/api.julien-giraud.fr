@@ -14,3 +14,6 @@ define('PATH_DOMAIN', PATH_API . '/domain');
 define('PATH_DAO', PATH_DOMAIN . '/dao');
 define('PATH_MODEL', PATH_DOMAIN . '/model');
 define('PATH_SERVICE', PATH_DOMAIN . '/service');
+
+// Relative links (3rd degree)
+define('PATH_DTO', PATH_MODEL . '/dto');

@@ -46,7 +46,6 @@ class User implements JsonSerializable {
         return [
             'id' => $this->id,
             'login' => $this->login,
-            'hashedPassword' => $this->hashedPassword, // TODO enlever ça après les tests
             'token' => $this->token
         ];
     }

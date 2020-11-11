@@ -12,11 +12,16 @@ class UserService {
     }
 
     public function login($userDTO) {
-        $user = $this->userDAO->getUserByLogin($userDTO->login);
+        if ($userDTO === null) {
+            return null;
+        }
 
-        if ($user === false || !password_verify($userDTO->password, $user->hashedPassword)) {
+        $user = $this->userDAO->getUserByLogin($userDTO->getLogin());
+
+        if ($user === false || !password_verify($userDTO->getPassword(), $user->getHashedPassword())) {
             http_response_code(401);
-            HeaderService::$errorMessage = 'BAD_LOGIN_OR_PASSWORD';
+            HeaderService::$errorMessage = 'Bad login or password.';
+            HeaderService::$errorName = 'CONNECTION_FAILED';
             return null;
         }
 
@@ -25,15 +30,20 @@ class UserService {
     }
 
     public function register($userDTO) {
+        if ($userDTO === null) {
+            return null;
+        }
+
         $user = new User();
-        $user->setLogin($userDTO->login);
+        $user->setLogin($userDTO->getLogin());
         $user->setHashedPassword(
-            password_hash($userDTO->password, PASSWORD_BCRYPT)
+            password_hash($userDTO->getpassword(), PASSWORD_DEFAULT)
         );
 
         if ($this->userDAO->isLoginUsed($user->getLogin())) {
-            http_response_code(401);
-            HeaderService::$errorMessage = 'USED_LOGIN';
+            http_response_code(403);
+            HeaderService::$errorMessage = 'Login already exists.';
+            HeaderService::$errorName = 'USED_LOGIN';
             return null;
         }
 
