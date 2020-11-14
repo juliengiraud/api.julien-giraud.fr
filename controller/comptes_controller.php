@@ -1,20 +1,20 @@
 <?php
 
-require_once(PATH_SERVICE . '/UserService.php');
-require_once(PATH_DTO . '/UserDTO.php');
+require_once(PATH_SERVICE . "/UserService.php");
+require_once(PATH_DTO . "/UserDTO.php");
 
 $userService = new UserService();
 
 switch ($path[1]) {
 
-    case 'login':
+    case "login":
         $result = $userService->login(UserDTO::fromRequestBody());
         if ($result !== null) {
             print json_encode($result);
         }
         break;
 
-    case 'register':
+    case "register":
         $result = $userService->register(UserDTO::fromRequestBody());
         if ($result !== null) {
             print json_encode($result);

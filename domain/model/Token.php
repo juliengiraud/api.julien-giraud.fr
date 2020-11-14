@@ -8,22 +8,22 @@ class Token implements JsonSerializable {
     public function __construct() {
     }
 
-    public function getId() {
+    public function getId(): int {
         return $this->id;
     }
 
-    public function getToken() {
+    public function getToken(): string {
         return $this->token;
     }
 
-    public function setToken($token) {
+    public function setToken($token): void {
         $this->token = $token;
     }
 
-    public function jsonSerialize() {
+    public function jsonSerialize(): array {
         return [
-            'id' => $this->id,
-            'login' => $this->token
+            "id" => $this->id,
+            "login" => $this->token
         ];
     }
 
