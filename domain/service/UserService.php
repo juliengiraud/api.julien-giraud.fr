@@ -54,7 +54,7 @@ class UserService {
         return $user;
     }
 
-    private function updateToken(User $user): void {
+    private function updateToken($user): void {
 
     }
 
