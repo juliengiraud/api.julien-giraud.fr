@@ -1,18 +1,18 @@
 <?php
 
-require_once(PATH_DAO . '/AbstractGenericDAO.php');
-require_once(PATH_MODEL . '/Token.php');
+require_once(PATH_DAO . "/AbstractGenericDAO.php");
+require_once(PATH_MODEL . "/Token.php");
 
 class TokenDAO extends AbstractGenericDAO {
 
     public function __construct() {
     }
 
-    public function isTokenValid($token) {
-        $sql = 'SELECT COUNT(*) value FROM comptes_token WHERE token = ?';
+    public function isTokenKeyValid(string $key): bool {
+        $sql = "SELECT COUNT(*) value FROM comptes_token WHERE token = ?";
         $query = $this->getInstance()->db->prepare($sql);
-        $query->execute([ $token ]);
-        return $query->fetch(PDO::FETCH_OBJ)->value !== '0';
+        $query->execute([ $key ]);
+        return $query->fetch(PDO::FETCH_OBJ)->value !== "0";
     }
 
 }

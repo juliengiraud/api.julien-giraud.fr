@@ -1,6 +1,6 @@
 <?php
 
-require_once(PATH_SERVICE . '/TokenService.php');
+require_once(PATH_SERVICE . "/TokenService.php");
 
 class HeaderService {
 
@@ -20,71 +20,70 @@ class HeaderService {
         $this->initService();
     }
 
-    private function initService() {
-
+    private function initService(): void {
         // Set headers
-        header('Access-Control-Allow-Origin: *');
-        header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
-        header('Access-Control-Allow-Headers: Content-Type, Authorization');
-        header('Content-Type: application/json; charset=UTF-8');
+        header("Access-Control-Allow-Origin: *");
+        header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+        header("Access-Control-Allow-Headers: Content-Type, Authorization");
+        header("Content-Type: application/json; charset=UTF-8");
 
         // Always exit with 200 code status for OPTIONS request
-        if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+        if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
             exit(0);
         }
 
         // Check authorization
-        $path = explode('/', $_GET['path']);
+        $path = explode("/", $_GET["path"]);
         if ($this->tokenService->isTokenAuthorizationValid()
                 // We can access to some URL without token
-                || $path[0] === 'test' // -> /test
-                || $path[0] === 'comptes' && ($path[1] === 'login' // -> /comptes/login
-                    || $path[1] === 'register') // -> /comptes/register
+                || $path === ["test"]
+                || $path === ["comptes", "login"]
+                || $path === ["comptes", "register"]
         ) {
             $this->continue = true;
         } else {
             http_response_code(401);
-            HeaderService::$errorMessage = 'Invalid token.';
+            HeaderService::$errorMessage = "Invalid token.";
         }
     }
 
-    public function getContinue() {
+    public function getContinue(): bool {
         return $this->continue;
     }
 
-    public function returnHttpErrorResponseIfNeeded() {
+    public function returnHttpErrorResponseIfNeeded(): void {
         $response = null;
 
         switch(http_response_code()) {
             case 401:
                 $response = [
-                    'success' => false,
-                    'message' => HeaderService::$errorMessage,
-                    'error' => HeaderService::$errorName === null ? 'UNAUTHORIZED' : HeaderService::$errorName
+                    "success" => false,
+                    "message" => HeaderService::$errorMessage,
+                    "error" => HeaderService::$errorName ?? "UNAUTHORIZED"
                 ];
                 break;
 
             case 403:
                 $response = [
-                    'success' => false,
-                    'message' => HeaderService::$errorMessage,
-                    'error' => HeaderService::$errorName === null ? 'ALREADY_EXISTS' : HeaderService::$errorName
+                    "success" => false,
+                    "message" => HeaderService::$errorMessage,
+                    "error" => HeaderService::$errorName ?? "ALREADY_EXISTS"
                 ];
                 break;
 
             case 404:
                 $response = [
-                    'success' => false,
-                    'message' => 'The requested URL was not found on this server.',
-                    'error' => 'NOT_FOUND'
+                    "success" => false,
+                    "message" => "The requested URL was not found on this server.",
+                    "error" => "NOT_FOUND"
                 ];
                 break;
 
             case 422:
                 $response = [
-                    'success' => false,
-                    'message' => 'The request is missing a required parameter.',
-                    'error' => 'UNPROCESSABLE_ENTITY'
+                    "success" => false,
+                    "message" => "The request is missing a required parameter.",
+                    "error" => "UNPROCESSABLE_ENTITY"
                 ];
                 break;
         }

@@ -10,43 +10,52 @@ class User implements JsonSerializable {
     public function __construct() {
     }
 
-    public function getId() {
+    public static function fromObject(object $user) {
+        $newUser = new User();
+        $newUser->id = $user->id;
+        $newUser->login = $user->login;
+        $newUser->hashedPassword = $user->hashedPassword;
+        $newUser->token = $user->token;
+        return $newUser;
+    }
+
+    public function getId(): int {
         return $this->id;
     }
 
-    public function setId($id) {
+    public function setId($id): void {
         $this->id = $id;
     }
 
-    public function getLogin() {
+    public function getLogin(): string {
         return $this->login;
     }
 
-    public function setLogin($login) {
+    public function setLogin($login): void {
         $this->login = $login;
     }
 
-    public function getHashedPassword() {
+    public function getHashedPassword(): string {
         return $this->hashedPassword;
     }
 
-    public function setHashedPassword($hashedPassword) {
+    public function setHashedPassword($hashedPassword): void {
         $this->hashedPassword = $hashedPassword;
     }
 
-    public function getToken() {
+    public function getToken(): Token {
         return $this->token;
     }
 
-    public function setToken($token) {
+    public function setToken($token): void {
         $this->token = $token;
     }
 
-    public function jsonSerialize() {
+    public function jsonSerialize(): array {
         return [
-            'id' => $this->id,
-            'login' => $this->login,
-            'token' => $this->token
+            "id" => $this->id,
+            "login" => $this->login,
+            "token" => $this->token
         ];
     }
 

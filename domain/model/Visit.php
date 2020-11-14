@@ -2,11 +2,11 @@
 
 class Visit implements JsonSerializable {
 
-    private $id = null;
-    private $target = null;
-    private $ip = null;
-    private $userAgent = null;
-    private $date = null;
+    private $id;
+    private $target;
+    private $ip;
+    private $userAgent;
+    private $date;
 
     public function __construct() {
     }
@@ -19,7 +19,7 @@ class Visit implements JsonSerializable {
         return $this->target;
     }
 
-    public function setTarget($target) {
+    public function setTarget($target): void {
         $this->target = $target;
     }
 
@@ -27,7 +27,7 @@ class Visit implements JsonSerializable {
         return $this->ip;
     }
 
-    public function setIp($ip) {
+    public function setIp($ip): void {
         $this->ip = $ip;
     }
 
@@ -35,7 +35,7 @@ class Visit implements JsonSerializable {
         return $this->userAgent;
     }
 
-    public function setUserAgent($userAgent) {
+    public function setUserAgent($userAgent): void {
         $this->userAgent = $userAgent;
     }
 
@@ -43,11 +43,11 @@ class Visit implements JsonSerializable {
         return $this->date;
     }
 
-    public function setDate($date) {
+    public function setDate($date): void {
         $this->date = $date;
     }
 
-    public function jsonSerialize() {
+    public function jsonSerialize(): array {
         return [
             'id' => $this->id,
             'target' => $this->target,
