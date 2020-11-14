@@ -20,7 +20,7 @@ class VisitDAO extends AbstractGenericDAO {
         return $this->getInstance()->db->lastInsertId();
     }
 
-    public function isLoginUsed($login): bool {
+    public function isLoginUsed(string $login): bool {
         $sql = "SELECT COUNT(*) value FROM comptes_user WHERE login = ?";
         $query = $this->getInstance()->db->prepare($sql);
         $query->execute([ $login ]);

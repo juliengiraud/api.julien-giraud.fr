@@ -49,11 +49,11 @@ class Visit implements JsonSerializable {
 
     public function jsonSerialize(): array {
         return [
-            'id' => $this->id,
-            'target' => $this->target,
-            'ip' => $this->ip,
-            'userAgent' => $this->userAgent,
-            'date' => $this->date
+            "id" => $this->id,
+            "target" => $this->target,
+            "ip" => $this->ip,
+            "userAgent" => $this->userAgent,
+            "date" => $this->date
         ];
     }
 

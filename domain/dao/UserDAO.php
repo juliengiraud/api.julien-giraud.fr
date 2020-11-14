@@ -13,7 +13,7 @@ class UserDAO extends AbstractGenericDAO {
      *
      * @param login
      */
-    public function isLoginUsed($login): bool {
+    public function isLoginUsed(string $login): bool {
         $sql = "SELECT COUNT(*) value FROM comptes_user WHERE login = ?";
         $query = $this->getInstance()->db->prepare($sql);
         $query->execute([ $login ]);
@@ -30,7 +30,7 @@ class UserDAO extends AbstractGenericDAO {
         return $this->getInstance()->db->lastInsertId();
     }
 
-    public function getUserByLogin($login): User {
+    public function getUserByLogin(string $login): User {
         $sql = "SELECT * FROM comptes_user WHERE login = ?";
         $query = $this->getInstance()->db->prepare($sql);
         $query->setFetchMode(PDO::FETCH_CLASS, "User");

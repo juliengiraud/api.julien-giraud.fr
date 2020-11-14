@@ -3,6 +3,7 @@
 require_once(PATH_DAO . "/UserDAO.php");
 require_once(PATH_DTO . "/UserDTO.php");
 require_once(PATH_MODEL . "/User.php");
+require_once(PATH_SERVICE . "/HeaderService.php");
 
 class UserService {
 
