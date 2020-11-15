@@ -9,10 +9,12 @@ class TokenDAO extends AbstractGenericDAO {
     public function __construct() {
     }
 
-    public function isTokenKeyValid(string $key): bool {
-        $sql = "SELECT COUNT(*) value FROM comptes_token WHERE token = ?";
+    public function isTokenValid(string $token): bool {
+        $sql = "SELECT COUNT(*) value
+                FROM comptes_token t JOIN comptes_user u on t.id = u.tokenId
+                WHERE token = ? and creationDate > date_sub(now(), interval 2 week)";
         $query = $this->getInstance()->db->prepare($sql);
-        $query->execute([ $key ]);
+        $query->execute([ $token ]);
         return $query->fetch(PDO::FETCH_OBJ)->value !== "0";
     }
 
@@ -23,6 +25,13 @@ class TokenDAO extends AbstractGenericDAO {
         $query->execute([ $id ]);
         $token = Token::fromObject($query->fetch(PDO::FETCH_CLASS));
         return $token;
+    }
+
+    public function create($token): int {
+        $sql = "INSERT INTO comptes_token (token) VALUES (?)";
+        $query = $this->getInstance()->db->prepare($sql);
+        $query->execute([ $token->getToken() ]);
+        return $this->getInstance()->db->lastInsertId();
     }
 
 }

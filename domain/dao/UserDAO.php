@@ -30,6 +30,18 @@ class UserDAO extends AbstractGenericDAO {
         return $this->getInstance()->db->lastInsertId();
     }
 
+    public function update(User $user): int {
+        $sql = "UPDATE comptes_user SET login = ?, hashedPassword = ?, tokenId = ? WHERE id = ?";
+        $query = $this->getInstance()->db->prepare($sql);
+        $query->execute([
+            $user->getLogin(),
+            $user->getHashedPassword(),
+            $user->getTokenId(),
+            $user->getId(),
+        ]);
+        return $this->getInstance()->db->lastInsertId();
+    }
+
     public function getUserByLogin(string $login): User {
         $sql = "SELECT * FROM comptes_user WHERE login = ?";
         $query = $this->getInstance()->db->prepare($sql);

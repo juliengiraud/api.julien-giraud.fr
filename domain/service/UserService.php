@@ -58,14 +58,18 @@ class UserService {
     }
 
     private function updateToken(User $user): void {
-        // si l'utilisateur a un token et qu'il est encore valide on le charge
-        // sinon (pas valide ou pas de token) on ajoute un nouveau token et on le charge
         if ($user->getTokenId() !== null) {
             $token = $this->tokenService->getTokenFromUser($user);
-            $user->setToken($token);
-        } else {
-            var_dump($user);
+            if ($token->isValid()) {
+                $user->setToken($token);
+                return;
+            }
         }
+
+        $token = $this->tokenService->generateNewToken();
+        $user->setToken($token);
+        $user->setTokenId($token->getId());
+        $this->userDAO->update($user);
     }
 
 }

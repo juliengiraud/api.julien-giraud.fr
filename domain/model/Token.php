@@ -2,12 +2,12 @@
 
 require_once(PATH_MODEL . "/FromObject.php");
 
-class Token implements JsonSerializable, FromObject {
+class Token implements FromObject {
 
+    private const LIFE_TIME = 14 * 24 * 3600; // 2 weeks
     private $id;
     private $token;
     private $creationDate;
-    private $expirationDate;
 
     public function __construct() {
     }
@@ -16,6 +16,7 @@ class Token implements JsonSerializable, FromObject {
         $newToken = new Token();
         $newToken->id = $token->id;
         $newToken->token = $token->token;
+        $newToken->creationDate = strtotime($token->creationDate);
         return $newToken;
     }
 
@@ -39,18 +40,8 @@ class Token implements JsonSerializable, FromObject {
         $this->creationDate = $creationDate;
     }
 
-    public function getExpirationDate(): string {
-        return $this->expirationDate;
-    }
-
-    public function setExpirationDate($expirationDate): void {
-        $this->expirationDate = $expirationDate;
-    }
-
-    public function jsonSerialize(): array {
-        return [
-            "token" => $this->token
-        ];
+    public function isValid(): bool {
+        return $this->creationDate + Token::LIFE_TIME >= time();
     }
 
 }

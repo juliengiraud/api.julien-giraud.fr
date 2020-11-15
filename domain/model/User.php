@@ -66,7 +66,7 @@ class User implements JsonSerializable, FromObject {
         return [
             "id" => $this->id,
             "login" => $this->login,
-            "token" => $this->token->getToken()
+            "token" => $this->token !== null ? $this->token->getToken() : null
         ];
     }
 

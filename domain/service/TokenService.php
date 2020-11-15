@@ -21,16 +21,20 @@ class TokenService {
             return false;
         }
         $token = explode(" ", $headerToken)[1];
-        return $this->tokenDAO->isTokenKeyValid($token);
+        return $this->tokenDAO->isTokenValid($token);
     }
 
-    public function generateNewTokenKey(): string {
+    public function generateNewToken(): Token {
+        $newToken = new Token();
         do {
-            $key = $this->generateRandomString();
+            $token = $this->generateRandomString();
         }
-        while ($this->tokenDAO->isTokenKeyValid($key));
+        while ($this->tokenDAO->isTokenValid($token));
 
-        return $key;
+        $newToken->setToken($token);
+        $tokenId = $this->tokenDAO->create($newToken);
+
+        return $this->tokenDAO->findOne($tokenId);
     }
 
     private function generateRandomString(): string {
