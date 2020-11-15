@@ -1,6 +1,8 @@
 <?php
 
 require_once(PATH_DAO . "/TokenDAO.php");
+require_once(PATH_MODEL . "/Token.php");
+require_once(PATH_MODEL . "/User.php");
 
 class TokenService {
 
@@ -39,6 +41,10 @@ class TokenService {
             $randomString .= $characters[rand(0, $charactersLength - 1)];
         }
         return $randomString;
+    }
+
+    public function getTokenFromUser(User $user): Token {
+        return $this->tokenDAO->findOne($user->getTokenId());
     }
 
 }

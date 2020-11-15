@@ -4,13 +4,16 @@ require_once(PATH_DAO . "/UserDAO.php");
 require_once(PATH_DTO . "/UserDTO.php");
 require_once(PATH_MODEL . "/User.php");
 require_once(PATH_SERVICE . "/HeaderService.php");
+require_once(PATH_SERVICE . "/TokenService.php");
 
 class UserService {
 
     private $userDAO;
+    private $tokenService;
 
     public function __construct() {
         $this->userDAO = new UserDAO();
+        $this->tokenService = new TokenService();
     }
 
     public function login(UserDTO $userDTO) {
@@ -27,7 +30,7 @@ class UserService {
             return null;
         }
 
-        // TODO ajouter le token dans le user avant de le renvoyer
+        $this->updateToken($user);
         return $user;
     }
 
@@ -50,12 +53,19 @@ class UserService {
         }
 
         $user->setId($this->userDAO->create($user));
-        // TODO ajouter le token dans le user avant de le renvoyer
+        $this->updateToken($user);
         return $user;
     }
 
-    private function updateToken($user): void {
-
+    private function updateToken(User $user): void {
+        // si l'utilisateur a un token et qu'il est encore valide on le charge
+        // sinon (pas valide ou pas de token) on ajoute un nouveau token et on le charge
+        if ($user->getTokenId() !== null) {
+            $token = $this->tokenService->getTokenFromUser($user);
+            $user->setToken($token);
+        } else {
+            var_dump($user);
+        }
     }
 
 }

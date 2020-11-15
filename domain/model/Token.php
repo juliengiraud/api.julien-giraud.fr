@@ -1,11 +1,22 @@
 <?php
 
-class Token implements JsonSerializable {
+require_once(PATH_MODEL . "/FromObject.php");
+
+class Token implements JsonSerializable, FromObject {
 
     private $id;
     private $token;
+    private $creationDate;
+    private $expirationDate;
 
     public function __construct() {
+    }
+
+    public static function fromObject($token) {
+        $newToken = new Token();
+        $newToken->id = $token->id;
+        $newToken->token = $token->token;
+        return $newToken;
     }
 
     public function getId(): int {
@@ -20,10 +31,25 @@ class Token implements JsonSerializable {
         $this->token = $token;
     }
 
+    public function getCreationDate(): string {
+        return $this->creationDate;
+    }
+
+    public function setCreationDate($creationDate): void {
+        $this->creationDate = $creationDate;
+    }
+
+    public function getExpirationDate(): string {
+        return $this->expirationDate;
+    }
+
+    public function setExpirationDate($expirationDate): void {
+        $this->expirationDate = $expirationDate;
+    }
+
     public function jsonSerialize(): array {
         return [
-            "id" => $this->id,
-            "login" => $this->token
+            "token" => $this->token
         ];
     }
 

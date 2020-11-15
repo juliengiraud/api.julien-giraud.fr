@@ -1,21 +1,24 @@
 <?php
 
-class User implements JsonSerializable {
+require_once(PATH_MODEL . "/FromObject.php");
+
+class User implements JsonSerializable, FromObject {
 
     private $id;
     private $login;
     private $hashedPassword;
     private $token;
+    private $tokenId;
 
     public function __construct() {
     }
 
-    public static function fromObject(object $user) {
+    public static function fromObject($user) {
         $newUser = new User();
         $newUser->id = $user->id;
         $newUser->login = $user->login;
         $newUser->hashedPassword = $user->hashedPassword;
-        $newUser->token = $user->token;
+        $newUser->tokenId = $user->tokenId;
         return $newUser;
     }
 
@@ -43,7 +46,7 @@ class User implements JsonSerializable {
         $this->hashedPassword = $hashedPassword;
     }
 
-    public function getToken(): Token {
+    public function getToken() {
         return $this->token;
     }
 
@@ -51,11 +54,19 @@ class User implements JsonSerializable {
         $this->token = $token;
     }
 
+    public function getTokenId() {
+        return $this->tokenId;
+    }
+
+    public function setTokenId($tokenId): void {
+        $this->tokenId = $tokenId;
+    }
+
     public function jsonSerialize(): array {
         return [
             "id" => $this->id,
             "login" => $this->login,
-            "token" => $this->token
+            "token" => $this->token->getToken()
         ];
     }
 
