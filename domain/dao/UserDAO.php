@@ -52,4 +52,13 @@ class UserDAO extends AbstractGenericDAO {
         return $user;
     }
 
+    public function getUserFromToken(Token $token): User {
+        $sql = "SELECT * FROM comptes_user WHERE tokenId = ?";
+        $query = $this->getInstance()->db->prepare($sql);
+        $query->setFetchMode(PDO::FETCH_CLASS, "User");
+        $query->execute([ $token->getId() ]);
+        $user = User::fromObject($query->fetch(PDO::FETCH_CLASS));
+        return $user;
+    }
+
 }

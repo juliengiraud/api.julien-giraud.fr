@@ -73,4 +73,12 @@ class UserService {
         $this->userDAO->update($user);
     }
 
+    public function getActiveUser() {
+        $token = $this->tokenService->getToken();
+        if ($token === null) {
+            return null;
+        }
+        return $this->userDAO->getUserFromToken($token);
+    }
+
 }
