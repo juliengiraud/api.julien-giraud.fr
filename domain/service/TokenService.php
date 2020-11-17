@@ -24,12 +24,29 @@ class TokenService {
         return $this->tokenDAO->isTokenValid($token);
     }
 
+    public function getToken() {
+        $token = $this->getTokenString();
+        if ($token === "") {
+            return null;
+        }
+        return $this->tokenDAO->find($token);
+    }
+
+    private function getTokenString(): string {
+        $headerToken = $_SERVER["HTTP_AUTHORIZATION"];
+        $tokenMethod = explode(" ", $headerToken)[0];
+        if ($tokenMethod !== "Bearer") {
+            return "";
+        }
+        return explode(" ", $headerToken)[1];
+    }
+
     public function generateNewToken(): Token {
         $newToken = new Token();
         do {
             $token = $this->generateRandomString();
         }
-        while ($this->tokenDAO->isTokenValid($token));
+        while ($this->tokenDAO->isTokenFree($token));
 
         $newToken->setToken($token);
         $tokenId = $this->tokenDAO->create($newToken);
