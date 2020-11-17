@@ -20,7 +20,4 @@ switch ($path[1]) {
             print json_encode($result);
         }
         break;
-
-    default:
-        http_response_code(404);
 }

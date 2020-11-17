@@ -11,7 +11,4 @@ switch ($path[1]) {
             $visitService->getAllPagesViewCount()
         );
         break;
-
-    default:
-        http_response_code(404);
 }

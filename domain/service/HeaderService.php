@@ -1,13 +1,25 @@
 <?php
 
 require_once(PATH_SERVICE . "/TokenService.php");
+require_once(PATH_SERVICE . "/UserService.php");
 
 class HeaderService {
 
     private $continue;
-    private $tokenService;
-    public static $errorMessage; // TODO implémenter un singleton
+    public static $errorMessage;
     public static $errorName; // TODO implémenter un singleton
+    private $userService;
+
+    private $routes = [
+        "comptes" => [
+            "login" => ["auth" => false, "admin" => false],
+            "register" => ["auth" => false, "admin" => false]
+        ],
+        "stats" => [
+            "getAllPagesViewCount" => ["auth" => true, "admin" => true],
+        ],
+        "test" => []
+    ];
 
     public function __construct() {
 
@@ -15,9 +27,11 @@ class HeaderService {
         $this->continue = false;
         HeaderService::$errorMessage = null;
         $this->tokenService = new TokenService();
+        $this->userService = new UserService();
 
         // Start service functions
         $this->initService();
+        $this->checkRights();
     }
 
     private function initService(): void {
@@ -31,20 +45,34 @@ class HeaderService {
         if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
             exit(0);
         }
+    }
 
-        // Check authorization
+    private function checkRights() {
         $path = explode("/", $_GET["path"]);
-        if ($this->tokenService->isTokenAuthorizationValid()
-                // We can access to some URL without token
-                || $path === ["test"]
-                || $path === ["comptes", "login"]
-                || $path === ["comptes", "register"]
-        ) {
-            $this->continue = true;
-        } else {
+        $right = $this->routes;
+        foreach ($path as $node) {
+            if (isset($right[$node])) {
+                $right = $right[$node];
+            }
+        }
+        if (!isset($right["auth"]) || !isset($right["admin"])) {
+            http_response_code(404);
+            return;
+        }
+
+        $user = $this->userService->getActiveUser();
+        if ($right["auth"] && $user == null) {
             http_response_code(401);
             HeaderService::$errorMessage = "Invalid token.";
+            return;
         }
+        if ($right["admin"] && !$user->isAdmin()) {
+            http_response_code(403);
+            HeaderService::$errorMessage = "Invalid permissions.";
+            return;
+        }
+
+        $this->continue = true;
     }
 
     public function getContinue(): bool {
@@ -67,7 +95,7 @@ class HeaderService {
                 $response = [
                     "success" => false,
                     "message" => HeaderService::$errorMessage,
-                    "error" => HeaderService::$errorName ?? "ALREADY_EXISTS"
+                    "error" => HeaderService::$errorName ?? "FORBIDDEN"
                 ];
                 break;
 

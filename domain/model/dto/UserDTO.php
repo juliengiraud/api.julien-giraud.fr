@@ -11,7 +11,7 @@ class UserDTO implements RequestBody {
         $input = json_decode(
             file_get_contents("php://input")
         );
-        if (!@ $input->data || !@ $input->data->login || !@ $input->data->password
+        if (!isset($input->data) || !isset($input->data->login) || !isset($input->data->password)
                 || $input->data->login === null || $input->data->password === null
                 || $input->data->login === "" || $input->data->password === "") {
             http_response_code(422);

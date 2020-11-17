@@ -26,9 +26,6 @@ if ($headerService->getContinue()) {
         case "test":
             require_once("./test_controller.php");
             break;
-
-        default:
-            http_response_code(404);
     }
 }
 
