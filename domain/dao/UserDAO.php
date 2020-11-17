@@ -21,11 +21,12 @@ class UserDAO extends AbstractGenericDAO {
     }
 
     public function create($entity): int {
-        $sql = "INSERT INTO comptes_user (login, hashedPassword) VALUES (?, ?)";
+        $sql = "INSERT INTO comptes_user (login, hashedPassword, admin) VALUES (?, ?, ?)";
         $query = $this->getInstance()->db->prepare($sql);
         $query->execute([
             $entity->getLogin(),
-            $entity->getHashedPassword()
+            $entity->getHashedPassword(),
+            $entity->isAdmin()
         ]);
         return $this->getInstance()->db->lastInsertId();
     }

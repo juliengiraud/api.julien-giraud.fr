@@ -44,6 +44,7 @@ class UserService {
         $user->setHashedPassword(
             password_hash($userDTO->getpassword(), PASSWORD_DEFAULT)
         );
+        $user->setAdmin(false);
 
         if ($this->userDAO->isLoginUsed($user->getLogin())) {
             http_response_code(403);

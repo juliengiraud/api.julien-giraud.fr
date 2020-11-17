@@ -9,6 +9,7 @@ class User implements JsonSerializable, FromObject {
     private $hashedPassword;
     private $token;
     private $tokenId;
+    private $admin;
 
     public function __construct() {
     }
@@ -19,6 +20,7 @@ class User implements JsonSerializable, FromObject {
         $newUser->login = $user->login;
         $newUser->hashedPassword = $user->hashedPassword;
         $newUser->tokenId = $user->tokenId;
+        $newUser->admin = $user->admin === "1";
         return $newUser;
     }
 
@@ -62,11 +64,20 @@ class User implements JsonSerializable, FromObject {
         $this->tokenId = $tokenId;
     }
 
+    public function isAdmin() {
+        return $this->admin === true;
+    }
+
+    public function setAdmin($admin): void {
+        $this->admin = $admin;
+    }
+
     public function jsonSerialize(): array {
         return [
             "id" => $this->id,
             "login" => $this->login,
-            "token" => $this->token !== null ? $this->token->getToken() : null
+            "token" => $this->token !== null ? $this->token->getToken() : null,
+            "admin" => $this->admin === true
         ];
     }
 
