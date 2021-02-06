@@ -13,7 +13,8 @@ class HeaderService {
     private $routes = [
         "comptes" => [
             "login" => ["auth" => false, "admin" => false],
-            "register" => ["auth" => false, "admin" => false]
+            "register" => ["auth" => false, "admin" => false],
+            "getAllOperations" => ["auth" => false, "admin" => false]
         ],
         "stats" => [
             "getAllPagesViewCount" => ["auth" => true, "admin" => true],
