@@ -23,9 +23,17 @@ switch ($path[1]) {
         }
         break;
 
-    case "getAllOperations":
+    case "getOperations":
+        if (@$_GET['start'] && @$_GET['length']) {
+            $start = $_GET['start'];
+            $length = $_GET['length'];
+        } else {
+            http_response_code(400);
+            HeaderService::$errorMessage = "Bad parameters.";
+            break;
+        }
         $loggedUser = $userService->getActiveUser();
-        $result = $operationService->getAllOperations($loggedUser);
+        $result = $operationService->getOperations($loggedUser, $start, $length);
         if ($result !== null) {
             print json_encode($result);
         }

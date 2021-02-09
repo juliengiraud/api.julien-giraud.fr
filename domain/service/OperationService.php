@@ -12,8 +12,8 @@ class OperationService {
         $this->operationDAO = new OperationDAO();
     }
 
-    public function getAllOperations(User $user): array {
-        return $this->operationDAO->getAll($user->getId());
+    public function getOperations(User $user, int $start, int $length): array {
+        return $this->operationDAO->get($user->getId(), $start, $length);
     }
 
 }

@@ -14,7 +14,7 @@ class HeaderService {
         "comptes" => [
             "login" => ["auth" => false, "admin" => false],
             "register" => ["auth" => false, "admin" => false],
-            "getAllOperations" => ["auth" => false, "admin" => false]
+            "getOperations" => ["auth" => false, "admin" => false]
         ],
         "stats" => [
             "getAllPagesViewCount" => ["auth" => true, "admin" => true],
@@ -84,6 +84,14 @@ class HeaderService {
         $response = null;
 
         switch(http_response_code()) {
+            case 400:
+                $response = [
+                    "success" => false,
+                    "message" => HeaderService::$errorMessage,
+                    "error" => HeaderService::$errorName ?? "BAD_REQUEST"
+                ];
+                break;
+
             case 401:
                 $response = [
                     "success" => false,

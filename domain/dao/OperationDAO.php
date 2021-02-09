@@ -42,11 +42,14 @@ class OperationDAO extends AbstractGenericDAO {
         return $operation;
     }
 
-    public function getAll(int $userId): array {
-        $sql = "SELECT * FROM comptes_operation WHERE userId = ? ORDER BY date DESC";
+    public function get(int $userId, int $start, int $length): array {
+        $sql = "SELECT * FROM comptes_operation WHERE userId = :userId ORDER BY date DESC limit :start, :length";
         $query = $this->getInstance()->db->prepare($sql);
         $query->setFetchMode(PDO::FETCH_CLASS, "Operation");
-        $query->execute([ $userId ]);
+        $query->bindParam(':userId', $userId, PDO::PARAM_STR);
+        $query->bindParam(':start', $start, PDO::PARAM_INT);
+        $query->bindParam(':length', $length, PDO::PARAM_INT);
+        $query->execute();
         return $query->fetchAll(PDO::FETCH_CLASS);
     }
 
