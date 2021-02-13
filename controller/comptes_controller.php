@@ -3,6 +3,7 @@
 require_once(PATH_SERVICE . "/OperationService.php");
 require_once(PATH_SERVICE . "/UserService.php");
 require_once(PATH_DTO . "/UserDTO.php");
+require_once(PATH_DTO . "/OperationDTO.php");
 
 $userService = new UserService();
 $operationService = new OperationService();
@@ -38,6 +39,10 @@ switch ($path[1]) {
             print json_encode($result);
         }
         break;
+
+    case "update":
+        $loggedUser = $userService->getActiveUser();
+        $result = $operationService->update($loggedUser, OperationDTO::fromRequestBody());
         if ($result !== null) {
             print json_encode($result);
         }

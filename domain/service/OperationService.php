@@ -16,4 +16,11 @@ class OperationService {
         return $this->operationDAO->get($user->getId(), $start, $length);
     }
 
+    public function update(User $user, OperationDTO $operation): int {
+        if ($user->isAdmin()) {
+            return $this->operationDAO->rootUpdate($operation);
+        }
+        return $this->operationDAO->userUpdate($operation, $user);
+    }
+
 }

@@ -15,6 +15,7 @@ class HeaderService {
             "login" => ["auth" => false, "admin" => false],
             "register" => ["auth" => false, "admin" => false],
             "getByStartAndQuantity" => ["auth" => true, "admin" => false],
+            "update" => ["auth" => true, "admin" => false]
         ],
         "stats" => [
             "getAllPagesViewCount" => ["auth" => true, "admin" => true],
