@@ -13,6 +13,7 @@ $headerService = new HeaderService();
 $path = explode("/", $_GET["path"]);
 
 if ($headerService->getContinue()) {
+
     switch ($path[0]) {
 
         case "comptes":

@@ -8,8 +8,18 @@ class OperationDAO extends AbstractGenericDAO {
     public function __construct() {
     }
 
-    public function create(Operation $operation): int {
-        $sql = "INSERT INTO comptes_operation (date, montant, commentaire, remboursable) VALUES (?, ?, ?, ?)";
+    // public function create(Operation $operation): int {
+    //     $sql = "INSERT INTO comptes_operation (date, montant, commentaire, remboursable) VALUES (?, ?, ?, ?)";
+    //     $query = $this->getInstance()->db->prepare($sql);
+    //     $query->execute([
+    //         $operation->getDate(),
+    //         $operation->getMontant(),
+    //         $operation->getCommentaire(),
+    //         $operation->isRemboursable()
+    //     ]);
+    //     return $this->getInstance()->db->lastInsertId();
+    // }
+
         $query = $this->getInstance()->db->prepare($sql);
         $query->execute([
             $operation->getDate(),
@@ -33,17 +43,21 @@ class OperationDAO extends AbstractGenericDAO {
         return $this->getInstance()->db->lastInsertId();
     }
 
-    public function getOperationById(int $id): Operation {
-        $sql = "SELECT * FROM comptes_operation WHERE id = ?";
-        $query = $this->getInstance()->db->prepare($sql);
-        $query->setFetchMode(PDO::FETCH_CLASS, "Operation");
-        $query->execute([ $id ]);
-        $operation = Operation::fromObject($query->fetch(PDO::FETCH_CLASS));
-        return $operation;
-    }
+    // public function getOperationById(int $id) {
+    //     $sql = "SELECT * FROM comptes_operation WHERE id = ?";
+    //     $query = $this->getInstance()->db->prepare($sql);
+    //     $query->setFetchMode(PDO::FETCH_CLASS, "Operation");
+    //     $query->execute([ $id ]);
+    //     $operation = Operation::fromObject($query->fetch(PDO::FETCH_CLASS));
+    //     return $operation;
+    // }
 
     public function get(int $userId, int $start, int $length): array {
-        $sql = "SELECT * FROM comptes_operation WHERE userId = :userId ORDER BY date DESC limit :start, :length";
+        $sql = "SELECT *
+                FROM comptes_operation
+                WHERE userId = :userId
+                ORDER BY date DESC, id DESC
+                LIMIT :start, :length";
         $query = $this->getInstance()->db->prepare($sql);
         $query->setFetchMode(PDO::FETCH_CLASS, "Operation");
         $query->bindParam(':userId', $userId, PDO::PARAM_STR);

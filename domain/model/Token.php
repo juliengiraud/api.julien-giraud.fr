@@ -13,6 +13,9 @@ class Token implements FromObject {
     }
 
     public static function fromObject($token) {
+        if ($token == null) {
+            return null;
+        }
         $newToken = new Token();
         $newToken->id = $token->id;
         $newToken->token = $token->token;

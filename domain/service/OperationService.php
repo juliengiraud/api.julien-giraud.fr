@@ -12,7 +12,7 @@ class OperationService {
         $this->operationDAO = new OperationDAO();
     }
 
-    public function getOperations(User $user, int $start, int $length): array {
+    public function getByStartAndQuantity(User $user, int $start, int $length): array {
         return $this->operationDAO->get($user->getId(), $start, $length);
     }
 

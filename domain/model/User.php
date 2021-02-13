@@ -15,6 +15,9 @@ class User implements JsonSerializable, FromObject {
     }
 
     public static function fromObject($user) {
+        if ($user == null) {
+            return null;
+        }
         $newUser = new User();
         $newUser->id = $user->id;
         $newUser->login = $user->login;

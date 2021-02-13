@@ -14,6 +14,9 @@ class Operation implements JsonSerializable, FromObject {
     }
 
     public static function fromObject($operation) {
+        if ($operation == null) {
+            return null;
+        }
         $newOperation = new Operation();
         $newOperation->id = $operation->id;
         $newOperation->date = $operation->date;

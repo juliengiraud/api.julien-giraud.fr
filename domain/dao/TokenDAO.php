@@ -25,7 +25,7 @@ class TokenDAO extends AbstractGenericDAO {
         return $query->fetch(PDO::FETCH_OBJ)->value !== "0";
     }
 
-    public function findOne(int $id): Token {
+    public function findOne(int $id) {
         $sql = "SELECT * FROM comptes_token WHERE id = ?";
         $query = $this->getInstance()->db->prepare($sql);
         $query->setFetchMode(PDO::FETCH_CLASS, "Token");
@@ -41,7 +41,7 @@ class TokenDAO extends AbstractGenericDAO {
         return $this->getInstance()->db->lastInsertId();
     }
 
-    public function find(string $token): Token {
+    public function find(string $token) {
         $sql = "SELECT * FROM comptes_token
                 WHERE token = ? and creationDate > date_sub(now(), interval 2 week)";
         $query = $this->getInstance()->db->prepare($sql);

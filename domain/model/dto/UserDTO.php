@@ -7,7 +7,7 @@ class UserDTO implements RequestBody {
     private $login;
     private $password;
 
-    public static function fromRequestBody(): UserDTO {
+    public static function fromRequestBody() {
         $input = json_decode(
             file_get_contents("php://input")
         );

@@ -43,7 +43,7 @@ class UserDAO extends AbstractGenericDAO {
         return $this->getInstance()->db->lastInsertId();
     }
 
-    public function getUserByLogin(string $login): User {
+    public function getUserByLogin(string $login) {
         $sql = "SELECT * FROM comptes_user WHERE login = ?";
         $query = $this->getInstance()->db->prepare($sql);
         $query->setFetchMode(PDO::FETCH_CLASS, "User");
@@ -52,7 +52,7 @@ class UserDAO extends AbstractGenericDAO {
         return $user;
     }
 
-    public function getUserFromToken(Token $token): User {
+    public function getUserFromToken(Token $token) {
         $sql = "SELECT * FROM comptes_user WHERE tokenId = ?";
         $query = $this->getInstance()->db->prepare($sql);
         $query->setFetchMode(PDO::FETCH_CLASS, "User");

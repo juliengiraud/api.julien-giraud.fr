@@ -23,8 +23,8 @@ switch ($path[1]) {
         }
         break;
 
-    case "getOperations":
-        if (@$_GET['start'] && @$_GET['length']) {
+    case "getByStartAndQuantity":
+        if (isset($_GET['start']) && isset($_GET['length'])) {
             $start = $_GET['start'];
             $length = $_GET['length'];
         } else {
@@ -33,7 +33,11 @@ switch ($path[1]) {
             break;
         }
         $loggedUser = $userService->getActiveUser();
-        $result = $operationService->getOperations($loggedUser, $start, $length);
+        $result = $operationService->getByStartAndQuantity($loggedUser, $start, $length);
+        if ($result !== null) {
+            print json_encode($result);
+        }
+        break;
         if ($result !== null) {
             print json_encode($result);
         }
