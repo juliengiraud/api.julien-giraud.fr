@@ -23,4 +23,8 @@ class OperationService {
         return $this->operationDAO->userUpdate($operation, $user);
     }
 
+    public function create(User $user, OperationDTO $operation): int {
+        return $this->operationDAO->create($operation, $user);
+    }
+
 }

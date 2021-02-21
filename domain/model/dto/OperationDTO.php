@@ -15,10 +15,10 @@ class OperationDTO implements RequestBody {
             file_get_contents("php://input")
         );
         if (!isset($input->data) || in_array(true, [
-                !isset($input->data->id), !isset($input->data->date), !isset($input->data->montant),
+                !isset($input->data->date), !isset($input->data->montant),
                 !isset($input->data->commentaire), !isset($input->data->remboursable)
             ]) || in_array("", [
-                $input->data->id, $input->data->date, $input->data->montant,
+                $input->data->date, $input->data->montant,
                 $input->data->commentaire, $input->data->remboursable
             ])) {
             http_response_code(422);
@@ -26,7 +26,7 @@ class OperationDTO implements RequestBody {
         }
 
         $operation = new OperationDTO();
-        $operation->id = $input->data->id;
+        $operation->id = $input->data->id; // On check ailleurs
         $operation->date = $input->data->date;
         $operation->montant = $input->data->montant;
         $operation->commentaire = $input->data->commentaire;

@@ -42,7 +42,20 @@ switch ($path[1]) {
 
     case "update":
         $loggedUser = $userService->getActiveUser();
-        $result = $operationService->update($loggedUser, OperationDTO::fromRequestBody());
+        $operation = OperationDTO::fromRequestBody();
+        if ($operation->getId() === null) {
+            http_response_code(422);
+            break;
+        }
+        $result = $operationService->update($loggedUser, $operation);
+        if ($result !== null) {
+            print json_encode($result);
+        }
+        break;
+
+    case "create":
+        $loggedUser = $userService->getActiveUser();
+        $result = $operationService->create($loggedUser, OperationDTO::fromRequestBody());
         if ($result !== null) {
             print json_encode($result);
         }

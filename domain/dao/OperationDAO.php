@@ -8,17 +8,26 @@ class OperationDAO extends AbstractGenericDAO {
     public function __construct() {
     }
 
-    // public function create(Operation $operation): int {
-    //     $sql = "INSERT INTO comptes_operation (date, montant, commentaire, remboursable) VALUES (?, ?, ?, ?)";
-    //     $query = $this->getInstance()->db->prepare($sql);
-    //     $query->execute([
-    //         $operation->getDate(),
-    //         $operation->getMontant(),
-    //         $operation->getCommentaire(),
-    //         $operation->isRemboursable()
-    //     ]);
-    //     return $this->getInstance()->db->lastInsertId();
-    // }
+    public function create(OperationDTO $operation, User $user): int {
+        $date = $operation->getDate();
+        $montant = $operation->getMontant();
+        $commentaire = $operation->getCommentaire();
+        $remboursable = $operation->isRemboursable();
+        $userId = $user->getId();
+        $sql = "INSERT INTO comptes_operation (
+                    date, montant, commentaire, remboursable, userId
+                ) VALUES (
+                    :date, :montant, :commentaire, :remboursable, :userId
+                )";
+        $query = $this->getInstance()->db->prepare($sql);
+        $query->bindParam(':date', $date, PDO::PARAM_STR);
+        $query->bindParam(':montant', $montant, PDO::PARAM_INT);
+        $query->bindParam(':commentaire', $commentaire, PDO::PARAM_STR);
+        $query->bindParam(':remboursable', $remboursable, PDO::PARAM_BOOL);
+        $query->bindParam(':userId', $userId, PDO::PARAM_INT);
+        return $query->execute();
+        return $this->getInstance()->db->lastInsertId();
+    }
 
     public function rootUpdate(OperationDTO $operation): int {
         $date = $operation->getDate();
@@ -48,7 +57,6 @@ class OperationDAO extends AbstractGenericDAO {
         $sql = "UPDATE comptes_operation
                 SET date = :date, montant = :montant, commentaire = :commentaire, remboursable = :remboursable
                 WHERE id = :id AND userId = :userId";
-        $query = $this->getInstance()->db->prepare($sql);
         $query = $this->getInstance()->db->prepare($sql);
         $query->bindParam(':date', $date, PDO::PARAM_STR);
         $query->bindParam(':montant', $montant, PDO::PARAM_INT);
