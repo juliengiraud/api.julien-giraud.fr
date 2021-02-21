@@ -91,4 +91,22 @@ class OperationDAO extends AbstractGenericDAO {
         return $query->fetchAll(PDO::FETCH_CLASS);
     }
 
+    public function rootDelete(int $id): int {
+        $sql = "DELETE FROM comptes_operation
+                WHERE id = :id";
+        $query = $this->getInstance()->db->prepare($sql);
+        $query->bindParam(':id', $id, PDO::PARAM_INT);
+        return $query->execute();
+    }
+
+    public function userDelete(int $id, User $user): int {
+        $userId = $user->getId();
+        $sql = "DELETE FROM comptes_operation
+                WHERE id = :id AND userId = :userId";
+        $query = $this->getInstance()->db->prepare($sql);
+        $query->bindParam(':id', $id, PDO::PARAM_INT);
+        $query->bindParam(':userId', $userId, PDO::PARAM_INT);
+        return $query->execute();
+    }
+
 }

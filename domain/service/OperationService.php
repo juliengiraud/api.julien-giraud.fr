@@ -27,4 +27,11 @@ class OperationService {
         return $this->operationDAO->create($operation, $user);
     }
 
+    public function delete(User $user, $id): int {
+        if ($user->isAdmin()) {
+            return $this->operationDAO->rootDelete($id);
+        }
+        return $this->operationDAO->userDelete($id, $user);
+    }
+
 }

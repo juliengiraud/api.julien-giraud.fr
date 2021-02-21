@@ -26,7 +26,7 @@ class OperationDTO implements RequestBody {
         }
 
         $operation = new OperationDTO();
-        $operation->id = $input->data->id; // On check ailleurs
+        $operation->id = isset($input->data->id) ? $input->data->id : null; // On check ailleurs
         $operation->date = $input->data->date;
         $operation->montant = $input->data->montant;
         $operation->commentaire = $input->data->commentaire;

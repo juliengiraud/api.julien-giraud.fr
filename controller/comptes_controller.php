@@ -60,4 +60,16 @@ switch ($path[1]) {
             print json_encode($result);
         }
         break;
+
+    case "delete":
+        $loggedUser = $userService->getActiveUser();
+        if (!@$_GET['id']) {
+            http_response_code(422);
+            break;
+        }
+        $result = $operationService->delete($loggedUser, $_GET['id']);
+        if ($result !== null) {
+            print json_encode($result);
+        }
+        break;
 }
