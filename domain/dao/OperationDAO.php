@@ -21,7 +21,7 @@ class OperationDAO extends AbstractGenericDAO {
                 )";
         $query = $this->getInstance()->db->prepare($sql);
         $query->bindParam(':date', $date, PDO::PARAM_STR);
-        $query->bindParam(':montant', $montant, PDO::PARAM_INT);
+        $query->bindParam(':montant', $montant, PDO::PARAM_STR);
         $query->bindParam(':commentaire', $commentaire, PDO::PARAM_STR);
         $query->bindParam(':remboursable', $remboursable, PDO::PARAM_BOOL);
         $query->bindParam(':userId', $userId, PDO::PARAM_INT);
@@ -40,7 +40,7 @@ class OperationDAO extends AbstractGenericDAO {
                 WHERE id = :id";
         $query = $this->getInstance()->db->prepare($sql);
         $query->bindParam(':date', $date, PDO::PARAM_STR);
-        $query->bindParam(':montant', $montant, PDO::PARAM_INT);
+        $query->bindParam(':montant', $montant, PDO::PARAM_STR);
         $query->bindParam(':commentaire', $commentaire, PDO::PARAM_STR);
         $query->bindParam(':remboursable', $remboursable, PDO::PARAM_BOOL);
         $query->bindParam(':id', $id, PDO::PARAM_INT);
@@ -59,22 +59,13 @@ class OperationDAO extends AbstractGenericDAO {
                 WHERE id = :id AND userId = :userId";
         $query = $this->getInstance()->db->prepare($sql);
         $query->bindParam(':date', $date, PDO::PARAM_STR);
-        $query->bindParam(':montant', $montant, PDO::PARAM_INT);
+        $query->bindParam(':montant', $montant, PDO::PARAM_STR);
         $query->bindParam(':commentaire', $commentaire, PDO::PARAM_STR);
         $query->bindParam(':remboursable', $remboursable, PDO::PARAM_BOOL);
         $query->bindParam(':id', $id, PDO::PARAM_INT);
         $query->bindParam(':userId', $userId, PDO::PARAM_INT);
         return $query->execute();
     }
-
-    // public function getOperationById(int $id) {
-    //     $sql = "SELECT * FROM comptes_operation WHERE id = ?";
-    //     $query = $this->getInstance()->db->prepare($sql);
-    //     $query->setFetchMode(PDO::FETCH_CLASS, "Operation");
-    //     $query->execute([ $id ]);
-    //     $operation = Operation::fromObject($query->fetch(PDO::FETCH_CLASS));
-    //     return $operation;
-    // }
 
     public function get(int $userId, int $start, int $length): array {
         $sql = "SELECT *
