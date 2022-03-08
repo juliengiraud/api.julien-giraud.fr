@@ -13,7 +13,7 @@ class VisitService {
 
     public function saveCurrentVisit(): void {
         // We first check if it's a real visit
-        if ($_SERVER["REDIRECT_STATUS"] === "404" // 404 errors
+        if (@$_SERVER["REDIRECT_STATUS"] && $_SERVER["REDIRECT_STATUS"] === "404" // 404 errors
                 || preg_match("/bot|crawl|spider|search/i", $_SERVER["HTTP_USER_AGENT"]) // Bots
                 || preg_match("/preprod/", $_SERVER["SCRIPT_URI"]) // My test server
                 || preg_match("/^81.185.{4,8}/", $_SERVER["HTTP_REMOTE_IP"]) // Probably my IP

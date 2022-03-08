@@ -100,4 +100,29 @@ class OperationDAO extends AbstractGenericDAO {
         return $query->execute();
     }
 
+    // Bilans généraux
+    // Bilan total : 1533.95 €
+    // Bilan perso : 1925.95 €
+    // Total des entrées : 21140.22 €
+    // Total des sorties : 19606.27 €
+    // Total qu'on me doit : 392.00 €
+    // Remboursements en attente : 4
+    // select
+    // (select sum(montant) from comptes_operation) "Bilan total", -- 1533.95 €
+    // (select sum(montant) from comptes_operation where remboursable is false) "Bilan perso", -- 1925.95 €
+    // (select sum(montant) from comptes_operation where montant > 0) "Total des entrées", -- 21140.22 €
+    // (select sum(montant) from comptes_operation where montant < 0) "Total des sorties", -- 19606.27 €
+    // (select sum(montant) from comptes_operation where remboursable is true) "Total qu'on me doit", -- 392.00 €
+    // (select count(id) from comptes_operation where remboursable is true) "Remboursements en attente" -- 4
+
+    // Bilans mensuels
+    // select
+        // (select sum(montant) from comptes_operation where year(date) = '2020' and month(date) = '09') "Bilan du mois",
+        // (select sum(montant) from comptes_operation where year(date) = '2020' and month(date) = '09' and remboursable is false) "Bilan perso du mois",
+        // (select sum(montant) from comptes_operation where year(date) = '2020' and month(date) = '09' and montant > 0) "Entrées du mois",
+        // (select sum(montant) from comptes_operation where year(date) = '2020' and month(date) = '09' and montant < 0) "Sorties du mois",
+        // (select sum(montant) from comptes_operation where year(date) = '2020' and month(date) = '09' and remboursable is true) "Ce mois on me doit",
+        // (select count(id) from comptes_operation where year(date) = '2020' and month(date) = '09' and remboursable is true) "Remboursements en attente",
+        // (select sum(montant) from comptes_operation where year(date) < '2020' or year(date) = '2020' and month(date) <= '09') "Bilan total"
+
 }
