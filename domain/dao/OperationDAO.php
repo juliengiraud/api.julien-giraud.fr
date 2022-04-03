@@ -100,6 +100,24 @@ class OperationDAO extends AbstractGenericDAO {
         return $query->execute();
     }
 
+    public function getStats(int $userId, int $year, int $month): array {
+        $sql = "select " .
+        "(select sum(montant) from comptes_operation where year(date) = :year and month(date) = :month and userId = :userId) bilan_mois, " .
+        "(select sum(montant) from comptes_operation where year(date) = :year and month(date) = :month and remboursable is false and userId = :userId) bilan_perso_mois, " .
+        "(select sum(montant) from comptes_operation where year(date) = :year and month(date) = :month and montant > 0 and userId = :userId) entrees_mois, " .
+        "(select sum(montant) from comptes_operation where year(date) = :year and month(date) = :month and montant < 0 and userId = :userId) sorties_mois, " .
+        "(select sum(montant) from comptes_operation where year(date) = :year and month(date) = :month and remboursable is true and userId = :userId) du, " .
+        "(select count(id) from comptes_operation where year(date) = :year and month(date) = :month and remboursable is true and userId = :userId) waiting_refund, " .
+        "(select sum(montant) from comptes_operation where userId = :userId and (year(date) < :year or year(date) = :year and month(date) <= :month)) bilan_total ";
+        $query = $this->getInstance()->db->prepare($sql);
+        // $query->setFetchMode(PDO::FETCH_CLASS, "Operation");
+        $query->bindParam(':year', $year, PDO::PARAM_STR);
+        $query->bindParam(':month', $month, PDO::PARAM_STR);
+        $query->bindParam(':userId', $userId, PDO::PARAM_INT);
+        $query->execute();
+        return $query->fetchAll(PDO::FETCH_OBJ);
+    }
+
     // Bilans généraux
     // Bilan total : 1533.95 €
     // Bilan perso : 1925.95 €
@@ -116,13 +134,6 @@ class OperationDAO extends AbstractGenericDAO {
     // (select count(id) from comptes_operation where remboursable is true) "Remboursements en attente" -- 4
 
     // Bilans mensuels
-    // select
-        // (select sum(montant) from comptes_operation where year(date) = '2020' and month(date) = '09') "Bilan du mois",
-        // (select sum(montant) from comptes_operation where year(date) = '2020' and month(date) = '09' and remboursable is false) "Bilan perso du mois",
-        // (select sum(montant) from comptes_operation where year(date) = '2020' and month(date) = '09' and montant > 0) "Entrées du mois",
-        // (select sum(montant) from comptes_operation where year(date) = '2020' and month(date) = '09' and montant < 0) "Sorties du mois",
-        // (select sum(montant) from comptes_operation where year(date) = '2020' and month(date) = '09' and remboursable is true) "Ce mois on me doit",
-        // (select count(id) from comptes_operation where year(date) = '2020' and month(date) = '09' and remboursable is true) "Remboursements en attente",
-        // (select sum(montant) from comptes_operation where year(date) < '2020' or year(date) = '2020' and month(date) <= '09') "Bilan total"
+
 
 }
