@@ -102,38 +102,25 @@ class OperationDAO extends AbstractGenericDAO {
 
     public function getStats(int $userId, int $year, int $month): array {
         $sql = "select " .
-        "(select sum(montant) from comptes_operation where year(date) = :year and month(date) = :month and userId = :userId) bilan_mois, " .
-        "(select sum(montant) from comptes_operation where year(date) = :year and month(date) = :month and remboursable is false and userId = :userId) bilan_perso_mois, " .
-        "(select sum(montant) from comptes_operation where year(date) = :year and month(date) = :month and montant > 0 and userId = :userId) entrees_mois, " .
-        "(select sum(montant) from comptes_operation where year(date) = :year and month(date) = :month and montant < 0 and userId = :userId) sorties_mois, " .
-        "(select sum(montant) from comptes_operation where year(date) = :year and month(date) = :month and remboursable is true and userId = :userId) du, " .
-        "(select count(id) from comptes_operation where year(date) = :year and month(date) = :month and remboursable is true and userId = :userId) waiting_refund, " .
-        "(select sum(montant) from comptes_operation where userId = :userId and (year(date) < :year or year(date) = :year and month(date) <= :month)) bilan_total ";
+        "(select sum(montant) from comptes_operation where userId = :userId and year(date) = :year and month(date) = :month) month_total, " .
+        "(select sum(montant) from comptes_operation where userId = :userId and year(date) = :year and month(date) = :month and remboursable is false) month_personnal_total, " .
+        "(select sum(montant) from comptes_operation where userId = :userId and year(date) = :year and month(date) = :month and montant > 0) month_input, " .
+        "(select sum(montant) from comptes_operation where userId = :userId and year(date) = :year and month(date) = :month and montant < 0) month_output, " .
+        "(select sum(montant) from comptes_operation where userId = :userId and year(date) = :year and month(date) = :month and remboursable is true) month_waiting_refund_output, " .
+        "(select count(id) from comptes_operation where userId = :userId and year(date) = :year and month(date) = :month and remboursable is true) month_waiting_refund_count, " .
+        "(select sum(montant) from comptes_operation where userId = :userId and (year(date) < :year or year(date) = :year and month(date) <= :month)) month_total_since_always, " .
+        "(select sum(montant) from comptes_operation where userId = :userId and year(date) = :year and month(date) <= :month) month_total_since_current_year, " .
+        "(select sum(montant) from comptes_operation where userId = :userId) always_total, " .
+        "(select sum(montant) from comptes_operation where userId = :userId and remboursable is false) always_personnal_total, " .
+        "(select sum(montant) from comptes_operation where userId = :userId and montant > 0) always_total_input, " .
+        "(select sum(montant) from comptes_operation where userId = :userId and montant < 0) always_total_output, " .
+        "(select sum(montant) from comptes_operation where userId = :userId and remboursable is true) always_waiting_refund_output, " .
+        "(select count(id) from comptes_operation where userId = :userId and remboursable is true) always_waiting_refund_count";
         $query = $this->getInstance()->db->prepare($sql);
-        // $query->setFetchMode(PDO::FETCH_CLASS, "Operation");
         $query->bindParam(':year', $year, PDO::PARAM_STR);
         $query->bindParam(':month', $month, PDO::PARAM_STR);
         $query->bindParam(':userId', $userId, PDO::PARAM_INT);
         $query->execute();
         return $query->fetchAll(PDO::FETCH_OBJ);
     }
-
-    // Bilans généraux
-    // Bilan total : 1533.95 €
-    // Bilan perso : 1925.95 €
-    // Total des entrées : 21140.22 €
-    // Total des sorties : 19606.27 €
-    // Total qu'on me doit : 392.00 €
-    // Remboursements en attente : 4
-    // select
-    // (select sum(montant) from comptes_operation) "Bilan total", -- 1533.95 €
-    // (select sum(montant) from comptes_operation where remboursable is false) "Bilan perso", -- 1925.95 €
-    // (select sum(montant) from comptes_operation where montant > 0) "Total des entrées", -- 21140.22 €
-    // (select sum(montant) from comptes_operation where montant < 0) "Total des sorties", -- 19606.27 €
-    // (select sum(montant) from comptes_operation where remboursable is true) "Total qu'on me doit", -- 392.00 €
-    // (select count(id) from comptes_operation where remboursable is true) "Remboursements en attente" -- 4
-
-    // Bilans mensuels
-
-
 }
