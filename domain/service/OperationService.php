@@ -34,10 +34,14 @@ class OperationService {
         return $this->operationDAO->userDelete($id, $user);
     }
 
-    public function getStats(User $user, int $year, int $month) {
+    public function getMonthStats(User $user, int $year, int $month) {
         $userId = $user->getId();
         $fullMonth = strlen($month) > 1 ? $month : "0" + $month;
-        return $this->operationDAO->getStats($userId, $year, $fullMonth);
+        return $this->operationDAO->getMonthStats($userId, $year, $fullMonth);
     }
 
+    public function getGlobalStats(User $user) {
+        $userId = $user->getId();
+        return $this->operationDAO->getGlobalStats($userId);
+    }
 }

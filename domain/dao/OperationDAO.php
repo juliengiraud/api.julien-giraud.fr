@@ -100,7 +100,21 @@ class OperationDAO extends AbstractGenericDAO {
         return $query->execute();
     }
 
-    public function getStats(int $userId, int $year, int $month): array {
+    public function getGlobalStats(int $userId): array {
+        $sql = "select " .
+        "(select sum(montant) from comptes_operation where userId = :userId) always_total, " .
+        "(select sum(montant) from comptes_operation where userId = :userId and remboursable is false) always_personnal_total, " .
+        "(select sum(montant) from comptes_operation where userId = :userId and montant > 0) always_total_input, " .
+        "(select sum(montant) from comptes_operation where userId = :userId and montant < 0) always_total_output, " .
+        "(select sum(montant) from comptes_operation where userId = :userId and remboursable is true) always_waiting_refund_output, " .
+        "(select count(id) from comptes_operation where userId = :userId and remboursable is true) always_waiting_refund_count";
+        $query = $this->getInstance()->db->prepare($sql);
+        $query->bindParam(':userId', $userId, PDO::PARAM_INT);
+        $query->execute();
+        return $query->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    public function getMonthStats(int $userId, int $year, int $month): array {
         $sql = "select " .
         "(select sum(montant) from comptes_operation where userId = :userId and year(date) = :year and month(date) = :month) month_total, " .
         "(select sum(montant) from comptes_operation where userId = :userId and year(date) = :year and month(date) = :month and remboursable is false) month_personnal_total, " .
@@ -109,13 +123,7 @@ class OperationDAO extends AbstractGenericDAO {
         "(select sum(montant) from comptes_operation where userId = :userId and year(date) = :year and month(date) = :month and remboursable is true) month_waiting_refund_output, " .
         "(select count(id) from comptes_operation where userId = :userId and year(date) = :year and month(date) = :month and remboursable is true) month_waiting_refund_count, " .
         "(select sum(montant) from comptes_operation where userId = :userId and (year(date) < :year or year(date) = :year and month(date) <= :month)) month_total_since_always, " .
-        "(select sum(montant) from comptes_operation where userId = :userId and year(date) = :year and month(date) <= :month) month_total_since_current_year, " .
-        "(select sum(montant) from comptes_operation where userId = :userId) always_total, " .
-        "(select sum(montant) from comptes_operation where userId = :userId and remboursable is false) always_personnal_total, " .
-        "(select sum(montant) from comptes_operation where userId = :userId and montant > 0) always_total_input, " .
-        "(select sum(montant) from comptes_operation where userId = :userId and montant < 0) always_total_output, " .
-        "(select sum(montant) from comptes_operation where userId = :userId and remboursable is true) always_waiting_refund_output, " .
-        "(select count(id) from comptes_operation where userId = :userId and remboursable is true) always_waiting_refund_count";
+        "(select sum(montant) from comptes_operation where userId = :userId and year(date) = :year and month(date) <= :month) month_total_since_current_year";
         $query = $this->getInstance()->db->prepare($sql);
         $query->bindParam(':year', $year, PDO::PARAM_STR);
         $query->bindParam(':month', $month, PDO::PARAM_STR);

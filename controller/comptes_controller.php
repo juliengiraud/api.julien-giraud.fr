@@ -75,11 +75,12 @@ switch ($path[1]) {
 
     case "stats":
         $loggedUser = $userService->getActiveUser();
-        if (!@$_GET['year'] || !@$_GET['month']) {
-            http_response_code(422);
-            break;
+        $result = null;
+        if (@$_GET['year'] && @$_GET['month']) {
+            $result = $operationService->getMonthStats($loggedUser, $_GET['year'], $_GET['month']);
+        } else {
+            $result = $operationService->getGlobalStats($loggedUser);
         }
-        $result = $operationService->getStats($loggedUser, $_GET['year'], $_GET['month']);
         if ($result !== null) {
             print json_encode($result);
         }
