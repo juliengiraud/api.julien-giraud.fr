@@ -44,4 +44,9 @@ class OperationService {
         $userId = $user->getId();
         return $this->operationDAO->getGlobalStats($userId);
     }
+
+    public function getOldestDate(User $user) {
+        $userId = $user->getId();
+        return $this->operationDAO->getOldestDate($userId);
+    }
 }

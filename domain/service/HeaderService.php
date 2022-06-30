@@ -18,7 +18,8 @@ class HeaderService {
             "update" => ["auth" => true, "admin" => false],
             "create" => ["auth" => true, "admin" => false],
             "delete" => ["auth" => true, "admin" => false],
-            "stats" => ["auth" => true, "admin" => false]
+            "stats" => ["auth" => true, "admin" => false],
+            "oldestDate" => ["auth" => true, "admin" => false]
         ],
         "stats" => [
             "getAllPagesViewCount" => ["auth" => true, "admin" => true],

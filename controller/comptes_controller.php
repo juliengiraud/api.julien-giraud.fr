@@ -85,4 +85,12 @@ switch ($path[1]) {
             print json_encode($result);
         }
         break;
+
+    case "oldestDate":
+        $loggedUser = $userService->getActiveUser();
+        $result = $operationService->getOldestDate($loggedUser);
+        if ($result !== null) {
+            print json_encode($result);
+        }
+        break;
 }
